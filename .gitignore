@@ -1,0 +1,26 @@
+# Local outputs and private project material
+/.claude/
+/app_build_env/
+/NarakaAtelier-install/
+/releases/
+/reports/
+/evidence/
+/experiments/
+/saved_profiles/
+/work/
+/Naraka Atelier.lnk
+/*.md
+!/README.md
+/CURRENT_VERSION.json
+
+# Generated game-derived resource pack and local runtime data
+/app/resources/
+/app/__pycache__/
+/app/vendor/__pycache__/
+
+# Python/build outputs
+__pycache__/
+*.py[cod]
+/build/
+/dist/
+*.spec.bak
