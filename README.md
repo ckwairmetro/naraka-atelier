@@ -41,3 +41,9 @@ Naraka Atelier 用于自定义《永劫无间》在本机显示的外观。Windo
 - 如果自动识别选中了另一份游戏，关闭 Atelier 后，在解压目录中运行 `NarakaAtelier.exe --game-dir "C:\Path To\NARAKA BLADEPOINT"`。如需使用独立的 Atelier 配置，可加上 `--state-dir "C:\Path To\Atelier State"`。
 
 [Developer build notes · 开发者打包说明](app/README.md)
+
+## License · 许可证
+
+The original Naraka Atelier code and documentation are licensed under [Apache License 2.0](LICENSE). Third-party software and NARAKA: BLADEPOINT game materials retain their respective licenses and rights. [Notices](NOTICE)
+
+Naraka Atelier 的原创代码和文档采用 [Apache 2.0 许可证](LICENSE)。第三方软件和《永劫无间》游戏素材保留各自的许可条款与相关权利。[声明](NOTICE)

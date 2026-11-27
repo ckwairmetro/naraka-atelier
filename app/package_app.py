@@ -71,6 +71,10 @@ def main():
         command.append(str(root / 'main.py'))
         subprocess.run(command, check=True)
 
+    distribution = args.output / 'NarakaAtelier'
+    for name in ('LICENSE', 'NOTICE', 'installation.html'):
+        shutil.copyfile(root.parent / name, distribution / name)
+
 
 if __name__ == '__main__':
     main()
