@@ -5,6 +5,7 @@ from pathlib import Path
 from urllib.parse import urlparse,parse_qs,unquote
 from core import HERE,LABELS,import_catalogue,save_json
 from full_engine import FullEngine as Engine
+from game_install import steam_installations,streaming_assets
 import owned_items
 import number_preview
 
@@ -55,7 +56,9 @@ def release_instance_lock(instance):
     instance.close()
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--no-browser',action='store_true',help='headless server only (testing)');p.add_argument('--browser',action='store_true',help='use the system browser instead of the app window');p.add_argument('--port',type=int,default=0);p.add_argument('--state-dir');p.add_argument('--compile-only',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--no-browser',action='store_true',help='headless server only (testing)');p.add_argument('--browser',action='store_true',help='use the system browser instead of the app window');p.add_argument('--port',type=int,default=0);p.add_argument('--state-dir');p.add_argument('--compile-only',type=Path)
+    p.add_argument('--game-dir',type=Path,help='Naraka installation folder or StreamingAssets folder')
+    a=p.parse_args()
     if not a.compile_only:
         state=Path(a.state_dir or Path(os.environ.get('LOCALAPPDATA',Path.home()))/'Naraka Atelier')
         instance=acquire_instance_lock(state)
@@ -71,11 +74,43 @@ def main():
         finally:release_instance_lock(instance)
     run_app(a)
 
+def resolve_game_directory(state, explicit, choose_folder):
+    location_file=state/'game-location.json'
+    saved=Path(json.loads(location_file.read_text(encoding='utf8'))) if location_file.exists() else None
+    if explicit is not None:
+        game=streaming_assets(explicit)
+        if game is None:
+            raise ValueError('The selected folder does not contain a Naraka installation. / 所选文件夹中没有找到《永劫无间》。')
+    else:
+        game=streaming_assets(saved) if saved is not None else None
+        if game is None and saved is None:
+            found=steam_installations()
+            if len(found)==1:
+                game=found[0]
+        if game is None and choose_folder is not None:
+            selected=choose_folder()
+            if selected:
+                game=streaming_assets(selected)
+        if game is None:
+            raise ValueError('Open Atelier again and select the folder containing NarakaBladepoint.exe, or use --game-dir. / 请重新打开 Atelier，选择含有 NarakaBladepoint.exe 的文件夹。')
+
+    if saved is not None and game!=saved and any((state/name).exists() for name in ('profile.json','pending.json')):
+        raise ValueError('This Atelier profile belongs to another game folder. Restore it there first, or use a separate --state-dir. / 此配置属于另一游戏目录。请先在原目录恢复，或使用独立的 --state-dir。')
+    return game
+
 def run_app(a):
     engine=None;token=secrets.token_urlsafe(32);job_gate=threading.Lock();ui={'close':None}
-    def make_engine():
+    explicit_game=getattr(a,'game_dir',None)
+    def make_engine(choose_folder=None):
         nonlocal engine
-        engine=Engine(a.state_dir);return engine
+        if getattr(sys,'frozen',False) or explicit_game is not None:
+            state=Path(a.state_dir or Path(os.environ.get('LOCALAPPDATA',Path.home()))/'Naraka Atelier')
+            game=resolve_game_directory(state,explicit_game,choose_folder)
+            engine=Engine(a.state_dir,game_dir=game)
+            save_json(state/'game-location.json',str(game))
+        else:
+            engine=Engine(a.state_dir)
+        return engine
     if a.compile_only:
         make_engine()
         # Packaging QA / read-only planning: writes candidates to app state only.
@@ -219,8 +254,8 @@ def run_app(a):
                     self.send({'closed':True});threading.Thread(target=ui['close'] or self.server.shutdown,daemon=True).start();return
                 self.send({'error':'Not found'},404)
             except Exception as exc:self.send({'error':str(exc)},400)
-    def start_server():
-        make_engine()
+    def start_server(choose_folder=None):
+        make_engine(choose_folder)
         server=ThreadingHTTPServer(('127.0.0.1',a.port),Handler);url='http://127.0.0.1:'+str(server.server_port)
         save_json(engine.state/'session.json',{'url':url,'port':server.server_port})
         if sys.stdout:print(url,flush=True)
@@ -241,9 +276,16 @@ def run_app(a):
     window=webview.create_window(TITLE,html=LOADING_HTML,width=1440,height=920,min_size=(960,640),background_color='#0f141b',text_select=True)
     state={'server':None}
     ui['close']=window.destroy
+    def choose_folder():
+        window.set_title(TITLE+' · Select game folder / 选择游戏文件夹')
+        try:
+            folders=window.create_file_dialog(webview.FOLDER_DIALOG)
+            return folders[0] if folders else None
+        finally:
+            window.set_title(TITLE)
     def boot():
         try:
-            server,url=start_server();state['server']=server
+            server,url=start_server(choose_folder);state['server']=server
             threading.Thread(target=server.serve_forever,daemon=True).start()
             window.load_url(url)
         except Exception as exc:

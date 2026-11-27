@@ -56,12 +56,13 @@ def import_catalogue(archive,dest,expected_version):
     return target,data,digest
 
 class Engine:
-    def __init__(self,state_dir=None,resources=None):
+    def __init__(self,state_dir=None,resources=None,*,game_dir=None):
         self.resources=Path(resources or HERE/'resources')
         self.state=Path(state_dir or Path(os.environ.get('LOCALAPPDATA',Path.home()))/'Naraka Atelier')
         self.state.mkdir(parents=True,exist_ok=True)
         self.manifest=json.loads((self.resources/'build.json').read_text(encoding='utf8'))
-        self.game=Path(self.manifest['game']);self.schema=json.loads((self.resources/'schema.json').read_text(encoding='utf8'))
+        self.game=Path(game_dir if game_dir is not None else self.manifest['game'])
+        self.schema=json.loads((self.resources/'schema.json').read_text(encoding='utf8'))
         self.decoder=RowDecoder(self.schema,json.loads((self.resources/'specs.json').read_text(encoding='utf8')))
         with gzip.open(self.resources/'native_rows.json.gz','rt',encoding='utf8') as f:n=json.load(f)
         self.pids=n['pids'];self.rows={t:{s:{int(k):base64.b64decode(v) for k,v in rs.items()} for s,rs in secs.items()} for t,secs in n['tables'].items()}

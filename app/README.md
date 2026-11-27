@@ -1,9 +1,15 @@
-# Atelier source and local build notes
+# Atelier developer builds
 
-This repository carries the Atelier Python application, vendor codec source, and web UI. The installed executable and build environment are not committed.
+The [installation guide](../README.md) covers the packaged Windows release. The source checkout needs a prepared `app/resources` pack containing a matched catalogue, native metadata, schema, and a verified clean baseline for the supported game build.
 
-The current code targets catalogue/client version 1.5.9.2. A fresh checkout does not contain `app/resources`; the application cannot start until a compatible local resource pack is prepared. That pack includes a catalogue export, native table/rule metadata, a schema, and pristine baseline data and hashes from the target PC's own Naraka installation. This repository intentionally excludes those generated files, extracted game data, and the existing machine's install-specific manifest/profile. Do not reuse another PC's resource baseline; the app verifies the local game build and baseline before applying changes.
+Build on 64-bit Windows with Python 3.13. From the repository root, run the following in PowerShell.
 
-Install Python dependencies with `py -m pip install -r app/requirements.txt`. The app requires Windows and WebView2 for its native window. `app/package_app.py` builds an onedir package after the local resource pack has been prepared. Its catalogue version must match the version pinned by the native metadata. Keep generated resources, backups, output builds, and user selections outside Git.
+```powershell
+py -3.13 -m venv .\app_build_env
+.\app_build_env\Scripts\python.exe -m pip install -r app/requirements.txt PyInstaller==6.22.3
+.\app_build_env\Scripts\python.exe app/package_app.py --version 0.2.9.2 --output releases/v0.2.9.2
+```
 
-Atelier edits local presentation resources only. It does not change account ownership, purchases, currency, or network state. A game update requires a fresh resource review and compatibility verification before use.
+The builder uses `app/resources/catalogue.zip` by default and accepts a different catalogue via `--catalogue`. It checks the catalogue version and packaged baseline hashes. The packaged app locates the game on the destination PC. Zip the entire output `NarakaAtelier` folder with its `_internal` directory for distribution.
+
+Keep generated resources, local profiles, backups, and build outputs outside Git. When the game changes, regenerate and verify the resource pack for the new build before packaging a new release.
