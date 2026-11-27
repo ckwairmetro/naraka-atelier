@@ -2,45 +2,41 @@
 
 [English](#english) · [简体中文](#简体中文)
 
-[Download the bilingual installation page · 下载双语安装页面](https://github.com/ckwairmetro/naraka-atelier/releases/download/v0.2.9.2/installation.html)
-
 ## English
 
-Naraka Atelier customizes the local appearance of NARAKA: BLADEPOINT. The Windows release includes the catalogue and the Python runtime. On a new PC, download the release ZIP and use the installed copy of Naraka.
+Naraka Atelier customizes how NARAKA: BLADEPOINT looks on your PC. The Windows setup includes the catalogue and Python runtime. It supports 64-bit Windows 10/11 and Steam build **26771036**, client **1.5.9.2**.
 
-### Install on Windows
+### Install
 
-1. Sign in to GitHub with an account that has access to this private repository. Under **Assets**, download **NarakaAtelier-v0.2.9.2-win-x64.zip**. [Download the release](https://github.com/ckwairmetro/naraka-atelier/releases/tag/v0.2.9.2)
-2. In File Explorer, right-click the ZIP and choose **Extract All**. Keep **NarakaAtelier.exe** and the **_internal** folder together.
-3. Close Naraka and its launcher, then double-click **NarakaAtelier.exe**. If the window fails to open, install the **Evergreen WebView2 Runtime** from Microsoft and try again. [Microsoft WebView2 download](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download)
-4. Atelier detects a single Steam installation automatically. If it asks for a folder, choose the one containing **NarakaBladepoint.exe**. In Steam, you can find it through **Manage → Browse local files**.
-5. When Atelier reports that the client is verified, choose your cosmetic settings and apply them with the game closed. You can open Naraka again when Atelier finishes.
+1. Download **NarakaAtelier-v0.2.9.3-Setup-x64.exe** from the Baidu Wangpan share link supplied by the publisher.
+2. Close Naraka and its launcher. Double-click the setup file and choose **English** or **简体中文**.
+3. Choose where to install Atelier. On the next page, confirm the separate Naraka folder containing **NarakaBladepoint.exe**. Use **Browse** if setup does not find your Steam copy. In Steam, **Manage → Browse local files** opens the game folder.
+4. Click **Install** and choose **Launch Naraka Atelier** on the finish page. Apply cosmetic settings only after Atelier verifies the client and while the game is closed.
 
-### Compatibility
+### Update and troubleshoot
 
-- Windows 10 or 11, 64-bit. This release targets **Steam build 26771036** and includes the catalogue for **client version 1.5.9.2**. A game update can change the required file hashes even when the client version shown is the same.
-- If Atelier reports a client or resource mismatch, use Steam’s **Properties → Installed Files → Verify integrity of game files** to repair altered files. If Steam installs a newer build, use an Atelier release that explicitly supports it.
-- If automatic detection picks a different copy of the game, close Atelier and run `NarakaAtelier.exe --game-dir "C:\Path To\NARAKA BLADEPOINT"` from the extracted folder. For a separate Atelier profile, add `--state-dir "C:\Path To\Atelier State"`.
+- In Atelier, choose **Updates · 检查更新** to see the installed version and any configured update link. When the publisher shares a newer setup, close Atelier and Naraka, then run it with the same folders. Your profile and backups are stored separately from the installed program files.
+- If the Atelier window fails to open, install Microsoft’s Evergreen WebView2 Runtime and try again. [Microsoft WebView2 download](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download)
+- If Atelier reports mismatched game files, verify the installation in Steam under **Properties → Installed Files**. If Steam has updated Naraka, use an Atelier release that supports the new build. [Steam file verification](https://help.steampowered.com/en/faqs/view/0C48-FCBD-DA71-93EB)
 
 ## 简体中文
 
-Naraka Atelier 用于自定义《永劫无间》在本机显示的外观。Windows 发布包已内置外观目录和 Python 运行环境。新电脑装好游戏后，下载发布包即可，无需另行下载或导入目录。
+Naraka Atelier 用于自定义《永劫无间》在本机显示的外观。Windows 安装程序已内置外观目录及 Python 运行环境，支持 64 位 Windows 10/11 和 **Steam 构建 26771036**（客户端 **1.5.9.2**）。
 
-### Windows 安装步骤
+### 安装步骤
 
-1. 使用有权访问此私有仓库的 GitHub 账号登录，在发布页面的 **Assets（资源）** 中下载 **NarakaAtelier-v0.2.9.2-win-x64.zip**。[下载发布包](https://github.com/ckwairmetro/naraka-atelier/releases/tag/v0.2.9.2)
-2. 在文件资源管理器中右键点击 ZIP，选择 **全部解压缩**。请将 **NarakaAtelier.exe** 和 **_internal** 文件夹保留在同一目录下。
-3. 退出《永劫无间》及其启动器，双击 **NarakaAtelier.exe**。如果窗口无法打开，请安装微软的 **Evergreen WebView2 运行时**后重试。[微软 WebView2 下载](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download)
-4. Atelier 会自动识别单个 Steam 游戏安装。如果提示选择目录，请选择包含 **NarakaBladepoint.exe** 的文件夹。可在 Steam 中通过 **管理 → 浏览本地文件** 找到该目录。
-5. 客户端验证通过后，选择所需的外观设置，并在游戏关闭时应用。应用完成后即可重新启动游戏。
+1. 通过发布者提供的百度网盘分享链接下载 **NarakaAtelier-v0.2.9.3-Setup-x64.exe**。
+2. 退出《永劫无间》及其启动器，双击安装程序并选择 **简体中文** 或 **English**。
+3. 选择 Atelier 的安装目录。在下一页确认《永劫无间》的游戏目录，其中应包含 **NarakaBladepoint.exe**。若安装程序未找到 Steam 游戏，请点击 **浏览**。也可在 Steam 中通过 **管理 → 浏览本地文件** 找到游戏目录。
+4. 点击 **安装**，并在完成页面选择 **运行 Naraka Atelier**。请在客户端验证通过且游戏关闭后再应用外观设置。
 
-### 兼容性
+### 更新与故障排查
 
-- 支持 64 位 Windows 10 或 11。本发布包适配 **Steam 构建版本 26771036**，内置 **客户端版本 1.5.9.2** 的目录。游戏更新后，即使显示的客户端版本号相同，文件校验值也可能改变。
-- 如果 Atelier 提示客户端或资源文件不匹配，可在 Steam 中选择 **属性 → 已安装文件 → 验证游戏文件的完整性**来修复被修改的文件。如果 Steam 已安装更新的构建版本，请使用明确支持该版本的 Atelier 发布包。
-- 如果自动识别选中了另一份游戏，关闭 Atelier 后，在解压目录中运行 `NarakaAtelier.exe --game-dir "C:\Path To\NARAKA BLADEPOINT"`。如需使用独立的 Atelier 配置，可加上 `--state-dir "C:\Path To\Atelier State"`。
+- 在 Atelier 中点击 **Updates · 检查更新**，查看已安装版本和已配置的下载链接。发布者分享新版后，请退出 Atelier 和游戏，运行新版安装程序并沿用原有目录。Atelier 配置和备份与程序文件分开保存。
+- 如果 Atelier 窗口无法打开，请安装微软的 Evergreen WebView2 运行时后重试。[微软 WebView2 下载](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download)
+- 如果 Atelier 提示游戏文件不匹配，可在 Steam 的 **属性 → 已安装文件** 中验证游戏文件。若 Steam 已更新游戏，请使用支持新构建版本的 Atelier 发布包。[Steam 文件验证说明](https://help.steampowered.com/zh-cn/faqs/view/0C48-FCBD-DA71-93EB)
 
-[Developer build notes · 开发者打包说明](app/README.md)
+[Developer build and release notes · 开发者打包和发布说明](app/README.md)
 
 ## License · 许可证
 

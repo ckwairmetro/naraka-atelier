@@ -6,6 +6,7 @@ from urllib.parse import urlparse,parse_qs,unquote
 from core import HERE,LABELS,import_catalogue,save_json
 from full_engine import FullEngine as Engine
 from game_install import steam_installations,streaming_assets
+from updates import check_updates
 import owned_items
 import number_preview
 
@@ -74,7 +75,7 @@ def main():
         finally:release_instance_lock(instance)
     run_app(a)
 
-def resolve_game_directory(state, explicit, choose_folder):
+def resolve_game_directory(state, explicit, choose_folder, installer_folder=None):
     location_file=state/'game-location.json'
     saved=Path(json.loads(location_file.read_text(encoding='utf8'))) if location_file.exists() else None
     if explicit is not None:
@@ -83,6 +84,8 @@ def resolve_game_directory(state, explicit, choose_folder):
             raise ValueError('The selected folder does not contain a Naraka installation. / 所选文件夹中没有找到《永劫无间》。')
     else:
         game=streaming_assets(saved) if saved is not None else None
+        if game is None and installer_folder is not None:
+            game=streaming_assets(installer_folder)
         if game is None and saved is None:
             found=steam_installations()
             if len(found)==1:
@@ -105,7 +108,12 @@ def run_app(a):
         nonlocal engine
         if getattr(sys,'frozen',False) or explicit_game is not None:
             state=Path(a.state_dir or Path(os.environ.get('LOCALAPPDATA',Path.home()))/'Naraka Atelier')
-            game=resolve_game_directory(state,explicit_game,choose_folder)
+            installer_folder=None
+            if getattr(sys,'frozen',False):
+                folder_file=Path(sys.executable).parent/'game-folder.txt'
+                if folder_file.is_file():
+                    installer_folder=folder_file.read_text(encoding='utf-8-sig').strip() or None
+            game=resolve_game_directory(state,explicit_game,choose_folder,installer_folder)
             engine=Engine(a.state_dir,game_dir=game)
             save_json(state/'game-location.json',str(game))
         else:
@@ -143,6 +151,9 @@ def run_app(a):
             try:
                 if u.path=='/api/bootstrap':return self.send({'catalogue':engine.catalogue,'items':[i for i in engine.items.values() if not i.get('synthetic')],'receivers':[i for i in engine.items.values() if i.get('synthetic')],'hairEffects':[{'id':i,'label':engine.row('HairEffect','HairEffect_Effect',i)['_Name']} for i in engine.rows['HairEffect']['HairEffect_Effect']],'labels':LABELS,'coverage':engine.coverage,'active':engine.baseline_active(),'profile':engine.disk,'features':engine.resolve_features(),'ownership':owned_items.load(engine),'ordering':engine.display_order(),'version':engine.manifest['catalogue_version'],'state_dir':str(engine.state),'game':str(engine.game)})
                 if u.path=='/api/status':return self.send(status_payload(engine))
+                if u.path=='/api/updates':
+                    manifest=engine.manifest
+                    return self.send(check_updates(manifest.get('application_version'),manifest.get('update_feed'),manifest.get('release_page')))
                 if u.path=='/api/targets':
                     q=parse_qs(u.query);src=engine.items[q['source'][0]];hero=q.get('hero',[None])[0]
                     category=q.get('category',[None])[0];kind=q.get('kind',[None])[0]

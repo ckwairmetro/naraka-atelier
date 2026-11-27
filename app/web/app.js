@@ -4,6 +4,24 @@ let B,items,tab='compose',domain='character',validTargets=[],targetPage=48,brows
 let pending=new Map(),removed=new Set();
 const drafts=new Map(),rarities={0:'Unrated',1:'Common',2:'Rare',3:'Epic',4:'Legendary',5:'Mythic',6:'Celestia'};
 async function api(path,data){const r=await fetch('/api/'+path,{method:data===undefined?'GET':'POST',headers:{'X-Session-Token':window.SESSION_TOKEN,...(data===undefined?{}:{'Content-Type':'application/json'})},body:data===undefined?undefined:JSON.stringify(data)});const j=await r.json();if(!r.ok)throw Error(j.error||r.statusText);return j;}
+async function showUpdates(){
+ const dialog=$('updatesDialog'),status=$('updatesStatus'),link=$('updatesLink'),instructions=$('updatesInstall');
+ status.textContent='Checking for updates… · 正在检查更新…';link.hidden=true;instructions.hidden=true;dialog.showModal();
+ try{
+  const result=await api('updates'),version=result.current?'v'+result.current:'—';
+  const message={
+   current:'You have the latest version. · 当前已是最新版本。',
+   available:'New version available: v'+result.latest+' · 有新版本可用。',
+   unconfigured:result.url?'Open the download page to check for a newer version. · 请打开下载页面查看更新。':'Check the share where you downloaded Atelier for a newer setup. · 请前往原分享链接查看是否有新版安装程序。',
+   unavailable:'The update feed is unavailable. · 暂时无法访问更新源。'
+  };
+  status.textContent='Installed · 已安装 '+version+' — '+message[result.state];
+  if(result.url){
+   link.href=result.url;link.textContent=result.state==='available'?'Get the update · 获取更新':'Open downloads · 打开下载页面';
+   link.hidden=false;instructions.hidden=false;
+  }
+ }catch(e){status.textContent='Could not check updates. · 无法检查更新。';}
+}
 function notice(text,error=false){$('notice').textContent=text;$('notice').classList.toggle('failure',error);}
 function node(tag,text='',cls=''){const el=document.createElement(tag);el.textContent=text;if(cls)el.className=cls;return el;}
 function icon(i){return i?.i?`<img src="/icons/${encodeURIComponent(i.i)}" alt="" loading="lazy">`:'';}
@@ -125,5 +143,6 @@ async function init(){try{B=await api('bootstrap');B.receivers||=[];items=Object
  $('clearQueue').onclick=()=>{pending.clear();removed.clear();renderQueue();renderActive();renderTargetGrid();refreshModelEffects();};$('apply').onclick=()=>start(merged());$('restore').onclick=()=>{for(const s of B.profile.selections)removed.add(selectionKey(s));pending.clear();renderQueue();renderActive();notice('Restoration queued. Use Start change with the game closed.');};$('recover').onclick=async()=>{try{const result=await api('recover',{});trackJob(result.job);}catch(e){notice(e.message,true);}};
  $('importButton').onclick=()=>$('zip').click();$('zip').onchange=async()=>{const file=$('zip').files[0];if(!file)return;try{const r=await fetch('/api/import',{method:'POST',headers:{'X-Session-Token':window.SESSION_TOKEN},body:file}),j=await r.json();if(!r.ok)throw Error(j.error);location.reload();}catch(e){notice(e.message,true);}};
  $('exitButton').onclick=async()=>{try{await api('shutdown',{});}catch(e){notice(e.message,true);}};
+ $('updatesButton').onclick=showUpdates;
  await setDomain('character');renderQueue();renderActive();await poll();setInterval(poll,1500);
  }catch(e){notice('Could not load app: '+e.message,true);}}

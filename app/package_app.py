@@ -10,6 +10,7 @@ import zipfile
 from pathlib import Path
 
 from core import COMMON, sha_file
+from updates import https_origin, version_number
 
 
 def main():
@@ -19,6 +20,8 @@ def main():
     parser.add_argument('--catalogue', type=Path, default=resources / 'catalogue.zip')
     parser.add_argument('--output', type=Path, default=root.parent / 'NarakaAtelier-install')
     parser.add_argument('--version', help='Application version recorded in the packaged manifest')
+    parser.add_argument('--update-feed', help='HTTPS URL of the release channel JSON')
+    parser.add_argument('--release-page', help='HTTPS page or shared folder for manual downloads')
     args = parser.parse_args()
 
     manifest = json.loads((resources / 'build.json').read_text(encoding='utf-8'))
@@ -42,7 +45,14 @@ def main():
     manifest.pop('previous_stack', None)
     manifest.pop('rebase_history', None)
     if args.version:
+        version_number(args.version)
         manifest['application_version'] = args.version
+    if args.update_feed:
+        https_origin(args.update_feed)
+        manifest['update_feed'] = args.update_feed
+    if args.release_page:
+        https_origin(args.release_page)
+        manifest['release_page'] = args.release_page
 
     with tempfile.TemporaryDirectory(prefix='atelier-package-') as directory:
         staging = Path(directory)
@@ -72,7 +82,7 @@ def main():
         subprocess.run(command, check=True)
 
     distribution = args.output / 'NarakaAtelier'
-    for name in ('LICENSE', 'NOTICE', 'installation.html'):
+    for name in ('LICENSE', 'NOTICE'):
         shutil.copyfile(root.parent / name, distribution / name)
 
 
