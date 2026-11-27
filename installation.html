@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Install Naraka Atelier on Windows. Installation guide in English and Simplified Chinese.">
+  <title>Install Naraka Atelier · 安装指南</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #11141a;
+      --panel: #1a2029;
+      --line: #333c49;
+      --text: #f4f1eb;
+      --muted: #bcc3cf;
+      --gold: #f0cb87;
+      font-family: "Segoe UI", "Microsoft YaHei UI", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(ellipse at 90% 0%, #302820 0%, transparent 42rem), var(--background);
+      min-height: 100vh;
+      line-height: 1.65;
+    }
+    a { color: var(--gold); text-underline-offset: .2em; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 5px; }
+    .shell { width: min(67rem, calc(100% - 3rem)); margin-inline: auto; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-block: 1.35rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { font-size: .9rem; font-weight: 700; letter-spacing: .16em; }
+    .wordmark span { color: var(--gold); }
+    .language { display: flex; flex-shrink: 0; gap: .2rem; padding: .2rem; border: 1px solid var(--line); border-radius: .6rem; }
+    .language[hidden] { display: none; }
+    .language button {
+      background: transparent;
+      color: var(--muted);
+      border: 0;
+      padding: .47rem .65rem;
+      font: inherit;
+      font-size: .875rem;
+      line-height: 1.25;
+      border-radius: .4rem;
+      cursor: pointer;
+    }
+    .language button[aria-pressed="true"] { background: #373126; color: var(--gold); }
+    main { padding-block: clamp(2.5rem, 7vw, 5.5rem) 3rem; }
+    .edition:not([hidden]) + .edition { margin-top: 4rem; }
+    .hero { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: clamp(1.5rem, 6vw, 5rem); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 1.15rem;
+      font-size: clamp(2.45rem, 6.8vw, 5.1rem);
+      line-height: 1.04;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+    h1 span { color: var(--gold); }
+    .intro { max-width: 33rem; margin-bottom: 0; font-size: 1.125rem; color: var(--muted); }
+    .download, .step, .help {
+      border-radius: .85rem;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .download {
+      padding: clamp(1.2rem, 4vw, 2rem);
+      background: linear-gradient(135deg, #272625, var(--panel) 65%);
+      border-top-color: #826748;
+    }
+    .download h2 { margin-bottom: .3rem; font-size: 1.32rem; }
+    .download p { color: var(--muted); margin-bottom: 1.15rem; }
+    .download-link {
+      display: block;
+      background: var(--gold);
+      border-radius: .52rem;
+      color: #20170d;
+      font-weight: 750;
+      padding: .7rem 1rem;
+      text-align: center;
+      text-decoration: none;
+    }
+    .download-link:hover { background: #ffdaa0; }
+    .download .access { margin: .8rem 0 0; font-size: .9rem; }
+    .installation { margin-top: clamp(2.5rem, 7vw, 4.75rem); }
+    .installation > h2 { font-size: 1.45rem; margin-bottom: .8rem; }
+    ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+    .step { padding: 1.15rem; counter-increment: step; }
+    .step h3 { margin-bottom: .55rem; font-size: 1rem; }
+    .step h3::before { content: counter(step, decimal) ". "; color: var(--gold); }
+    .step p, .help p { margin-bottom: 0; color: var(--muted); }
+    code { color: var(--text); font-family: Consolas, monospace; font-size: .94em; overflow-wrap: anywhere; }
+    .help { margin-top: .85rem; padding: .65rem 1.15rem; }
+    summary { padding: .35rem 0; font-weight: 650; cursor: pointer; }
+    .help p { padding-bottom: .55rem; }
+    @media (max-width: 48rem) {
+      .hero { grid-template-columns: 1fr; }
+      ol { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 26rem) {
+      .shell { width: calc(100% - 1.5rem); }
+      .wordmark { letter-spacing: .07em; }
+      header { gap: .4rem; }
+      .language button { padding-inline: .45rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="wordmark">NARAKA <span>ATELIER</span></div>
+      <div class="language" id="language" role="group" aria-label="Language / 语言" hidden>
+        <button type="button" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" data-lang="zh-Hans" lang="zh-Hans" aria-pressed="false">简体中文</button>
+      </div>
+    </header>
+    <main>
+      <section class="edition" id="en" lang="en" aria-labelledby="title-en">
+        <div class="hero">
+          <div>
+            <h1 id="title-en">Install Naraka <span>Atelier</span></h1>
+            <p class="intro">Customize how Naraka looks on your PC. The Windows download includes the catalogue and Python runtime.</p>
+          </div>
+          <div class="download">
+            <h2>Windows download</h2>
+            <p>Atelier v0.2.9.2 · Windows 10/11 x64<br>Steam build 26771036 · Client 1.5.9.2</p>
+            <a class="download-link" href="https://github.com/ckwairmetro/naraka-atelier/releases/download/v0.2.9.2/NarakaAtelier-v0.2.9.2-win-x64.zip">Download Atelier ZIP</a>
+            <p class="access">Sign in to GitHub with access to the private repository.</p>
+          </div>
+        </div>
+        <section class="installation" aria-labelledby="steps-en">
+          <h2 id="steps-en">Set up on your PC</h2>
+          <ol role="list">
+            <li class="step"><h3>Extract the ZIP</h3><p>Choose <strong>Extract All</strong> in File Explorer. Keep <code>_internal</code> beside <code>NarakaAtelier.exe</code>.</p></li>
+            <li class="step"><h3>Open Atelier</h3><p>Close Naraka and its launcher. Open <code>NarakaAtelier.exe</code>. If asked, select the folder containing <code>NarakaBladepoint.exe</code>.</p></li>
+            <li class="step"><h3>Apply your settings</h3><p>Wait for Atelier to verify the client. Choose and apply your cosmetics while Naraka is closed. Launch the game after Atelier finishes.</p></li>
+          </ol>
+          <details class="help">
+            <summary>Need help starting Atelier?</summary>
+            <p>If the app window fails to open, install <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download">Microsoft Evergreen WebView2</a>. For client mismatches or a custom install path, see the <a href="https://github.com/ckwairmetro/naraka-atelier/blob/master/README.md#compatibility">compatibility guide</a>.</p>
+          </details>
+        </section>
+      </section>
+      <section class="edition" id="zh-Hans" lang="zh-Hans" aria-labelledby="title-zh">
+        <div class="hero">
+          <div>
+            <h1 id="title-zh">安装 Naraka <span>Atelier</span></h1>
+            <p class="intro">自定义《永劫无间》在本机显示的外观。Windows 发布包已内置外观目录和 Python 运行环境。</p>
+          </div>
+          <div class="download">
+            <h2>Windows 版下载</h2>
+            <p>Atelier v0.2.9.2 · Windows 10/11 64 位<br>Steam 构建 26771036 · 客户端 1.5.9.2</p>
+            <a class="download-link" href="https://github.com/ckwairmetro/naraka-atelier/releases/download/v0.2.9.2/NarakaAtelier-v0.2.9.2-win-x64.zip">下载 Atelier ZIP</a>
+            <p class="access">请登录有权访问此私有仓库的 GitHub 账号。</p>
+          </div>
+        </div>
+        <section class="installation" aria-labelledby="steps-zh">
+          <h2 id="steps-zh">电脑安装步骤</h2>
+          <ol role="list">
+            <li class="step"><h3>解压 ZIP</h3><p>在文件资源管理器中选择<strong>全部解压缩</strong>。请将 <code>_internal</code> 文件夹与 <code>NarakaAtelier.exe</code> 保留在同一目录。</p></li>
+            <li class="step"><h3>打开 Atelier</h3><p>退出游戏及其启动器，运行 <code>NarakaAtelier.exe</code>。如提示选择目录，请选取包含 <code>NarakaBladepoint.exe</code> 的文件夹。</p></li>
+            <li class="step"><h3>应用外观设置</h3><p>等待 Atelier 验证客户端。在游戏关闭时选择并应用外观，等 Atelier 完成后再启动游戏。</p></li>
+          </ol>
+          <details class="help">
+            <summary>Atelier 无法启动？</summary>
+            <p>如果应用窗口无法打开，请安装<a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download">微软 Evergreen WebView2 运行时</a>。如遇客户端不匹配或需要手动指定目录，请参阅<a href="https://github.com/ckwairmetro/naraka-atelier/blob/master/README.md#简体中文">兼容性说明</a>。</p>
+          </details>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script>
+    const selector = document.getElementById('language');
+    const buttons = selector.querySelectorAll('button');
+    const editions = document.querySelectorAll('.edition');
+
+    function showLanguage(language) {
+      document.documentElement.lang = language;
+      for (const edition of editions) edition.hidden = edition.lang !== language;
+      for (const button of buttons) button.setAttribute('aria-pressed', button.dataset.lang === language);
+    }
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => showLanguage(button.dataset.lang));
+    }
+    showLanguage(navigator.language.toLowerCase().startsWith('zh') ? 'zh-Hans' : 'en');
+    selector.hidden = false;
+  </script>
+</body>
+</html>

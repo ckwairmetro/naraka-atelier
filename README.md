@@ -2,6 +2,8 @@
 
 [English](#english) · [简体中文](#简体中文)
 
+[Download the bilingual installation page · 下载双语安装页面](https://github.com/ckwairmetro/naraka-atelier/releases/download/v0.2.9.2/installation.html)
+
 ## English
 
 Naraka Atelier customizes the local appearance of NARAKA: BLADEPOINT. The Windows release includes the catalogue and the Python runtime. On a new PC, download the release ZIP and use the installed copy of Naraka.
